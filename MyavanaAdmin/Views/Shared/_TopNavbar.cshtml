@@ -1,0 +1,56 @@
+﻿<div class="row border-bottom">
+    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            
+            <form role="search" class="navbar-form-custom" method="post" action="">
+                <div class="form-group">
+                    
+                </div>
+            </form>
+        </div>
+        <ul class="nav navbar-top-links navbar-right">
+            <li style="padding:20px">
+                <span class="m-r-sm text-muted welcome-message" data-i18n="topnav.welcometext">Welcome to MyAvana Admin.</span>
+            </li>
+            <li>
+                <a class="togglemenu" href="#"><i class="fa fa-bars"></i> </a>
+            </li>
+            <li>
+                @*<a href="@Url.Action("Logout", "Home")">*@
+                <a onclick="logout()">
+                    <i class="fa fa-sign-out"></i> Log out
+                </a>
+            </li>
+            @*<li>
+                <a class="right-sidebar-toggle">
+                    <i class="fa fa-tasks"></i>
+                </a>
+            </li>*@
+        </ul>
+    </nav>
+</div>
+
+<script>
+    function logout() {
+        $.ajax({
+            type: "GET",
+            url: "/Auth/Logout",
+            success: function (response) {
+                window.location.href = "../Auth/Login";
+            },
+            failure: function (response) {
+            },
+            error: function (response) {
+            }
+        });
+    }
+
+    $('.togglemenu').click(function () {
+
+        var data = $('.navbar-static-side').is(":visible");
+        if (data)
+            $('.navbar-static-side').css('display', 'none');
+        else
+            $('.navbar-static-side').css('display', 'block');
+    });
+</script>

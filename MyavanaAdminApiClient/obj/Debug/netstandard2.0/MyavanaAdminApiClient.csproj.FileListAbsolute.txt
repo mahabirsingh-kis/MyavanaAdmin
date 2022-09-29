@@ -1,0 +1,12 @@
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\bin\Debug\netstandard2.0\MyavanaAdminApiClient.deps.json
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\bin\Debug\netstandard2.0\MyavanaAdminApiClient.dll
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\bin\Debug\netstandard2.0\MyavanaAdminApiClient.pdb
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\bin\Debug\netstandard2.0\MyavanaAdminModels.dll
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\bin\Debug\netstandard2.0\MyavanaAdminModels.pdb
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\obj\Debug\netstandard2.0\MyavanaAdminApiClient.csprojAssemblyReference.cache
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\obj\Debug\netstandard2.0\MyavanaAdminApiClient.csproj.CoreCompileInputs.cache
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\obj\Debug\netstandard2.0\MyavanaAdminApiClient.AssemblyInfoInputs.cache
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\obj\Debug\netstandard2.0\MyavanaAdminApiClient.AssemblyInfo.cs
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\obj\Debug\netstandard2.0\MyavanaAdminApiClient.csproj.CopyComplete
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\obj\Debug\netstandard2.0\MyavanaAdminApiClient.dll
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminApiClient\obj\Debug\netstandard2.0\MyavanaAdminApiClient.pdb

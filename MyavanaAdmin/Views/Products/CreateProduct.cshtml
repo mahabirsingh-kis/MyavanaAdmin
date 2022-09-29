@@ -1,0 +1,409 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper AuthoringTagHelpers.TagHelpers.EmailTagHelper, AuthoringTagHelpers
+@model MyavanaAdminModels.ProductsEntity
+@inject MyavanaAdminApiClient.ApiClient productType
+
+@{
+    Layout = "_Layout";
+}
+
+@if (Model != null)
+{
+    <input type="hidden" id="productid" value="@Model.guid" />
+    <input type="hidden" id="image" value="@Model.ImageName" />
+}
+
+<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('.select2').select2({ placeholder: "--Select--" });
+    });
+</script>
+<style>
+    .preloader {
+        width: calc(100% - 200px);
+        height: 100%;
+        top: 0px;
+        position: fixed;
+        z-index: 99999;
+        background: rgba(255, 255, 255, .8);
+    }
+
+        .preloader img {
+            position: absolute;
+            LEFT: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+        }
+
+    .loader {
+        overflow: visible;
+        padding-top: 2em;
+        height: 0;
+        width: 2em;
+    }
+
+    .alert-success, .alert-danger, .alert-info {
+        top: 110px !important;
+        width: 60% !important;
+        margin: 0 auto;
+        z-index: 99;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-40%);
+        text-align: center;
+        padding: 12px;
+        transition: all 1s linear;
+        box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        color: #80172a;
+        background-color: #fdd5dc;
+        border-color: #fcc4ce;
+    }
+
+        .alert-danger hr {
+            border-top-color: #fbacba;
+        }
+
+        .alert-danger .alert-link {
+            color: #550f1c;
+        }
+
+    .alert-success {
+        color: #1c6356;
+        background-color: #a8ffc3;
+        border-color: #13b755;
+    }
+
+        .alert-success hr {
+            border-top-color: #b4e7dd;
+        }
+
+        .alert-success .alert-link {
+            color: #113b33;
+        }
+</style>
+<div id="alert-success" class="alert alert-success alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span id="successMessage"></span>
+</div>
+<div class="alert alert-danger alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span id="failureMessage"></span>
+</div>
+
+<div class="preloader" style="display:none;">
+    <div class="loader">
+        <img src="~/images/loader.gif" />
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Post Product</h5>
+
+                </div>
+                <div class="ibox-content">
+                    @*<form method="post">*@
+                    <div class="form-group  row">
+                        <label class="col-sm-2 col-form-label">Product Type*</label>
+                        <div class="col-sm-10">
+                            <select class="form-control" id="productType" asp-for="ProductTypesId"
+                                    asp-items="@productType.GetProductType().Result.OrderBy(x => x.ProductName).Select(s => new SelectListItem() { Text = s.ProductName, Value=s.Id.ToString()})">
+                                <option value="">Select Type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group  row">
+                        <label class="col-sm-2 col-form-label">Product Name*</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="txtProductName" placeholder="Enter product name" asp-for="ProductName" class="form-control">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Actual Name*</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="txtActualName" placeholder="Enter actual name" asp-for="ActualName" class="form-control">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Brand Name*</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" id="txtBrandName" placeholder="Enter brand name" asp-for="BrandName" class="form-control">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label"> Hair Type*</label>
+                        <div class="col-sm-10">
+                            <select class="js-example-basic-multiple form-control select2" id="hairType"
+                                    asp-items="@productType.GetHairTypesList().Result.Select(s => new SelectListItem() { Text = s.Description, Value=s.HairTypeId.ToString()})" multiple></select>
+                        </div>
+                        @*<input type="text" id="txtType" asp-for="TypeFor" placeholder="Enter type" class="form-control">*@
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Image*</label>
+                        <div class="col-sm-10">
+                            <button id="btnImageClick" class="btn btn-outline-secondary">Choose image</button>
+                            <span id="txtImageName">@ViewBag.UploadedFile</span>
+                            <input type="file" id="productImage" accept="image/*" style="display:none" />
+                        </div>
+                        @*<div class="col-sm-10">
+                                <input type="text" id="txtImageName" asp-for="ImageName" placeholder="Enter image link" class="form-control">
+                            </div>*@
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Ingredients*</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" id="txtIngredients" asp-for="Ingredients" placeholder="Enter ingredients" class="form-control">
+                        </div>
+
+                        @*<div class="col-sm-10">
+                                <select class="js-example-basic-multiple form-control select2" id="ingredients"
+                                        asp-items="@productType.GetIngredientsList().Result.Select(s => new SelectListItem() { Text = s.Name, Value=s.IngedientsEntityId.ToString()})" multiple>
+                                    <option value="">Select Type</option>
+                                </select>
+                            </div>*@
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Product Details*</label>
+
+                        <div class="col-sm-10">
+                            <textarea id="txtProductDetails" rows="3" asp-for="ProductDetails" placeholder="Enter product details" class="form-control"></textarea>
+                            @*<input type="text" id="txtProductDetails" asp-for="ProductDetails" placeholder="Enter product details" class="form-control">*@
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Product Link*</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" id="txtProductLink" asp-for="ProductLink" placeholder="Enter product link" class="form-control">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Product Price($)*</label>
+                        @*@if (Model == null)
+                            {*@
+                        <div class="col-sm-10">
+                            <div class="row">
+                                <div class="col-3 d-flex">
+                                    <input type="text" class=" form-control" maxlength="3" id="txtActualPrice" placeholder="000">
+                                    <span class="align-items-end d-flex pl-4">.</span>
+                                </div>
+                                <div class="col-2">
+                                    <input type="text" class=" form-control" maxlength="2" id="txtDecimalPrice" placeholder="00">
+                                </div>
+                            </div>
+                        </div>
+                        @*}
+                            else
+                            {
+                                <div class="col-sm-10">
+                                    <div class="row">
+                                        <div class="col-3 d-flex">
+                                            <input type="text" class=" form-control" id="txtActualPrice" maxlength="3"  placeholder="000">
+                                            <span class="align-items-end d-flex pl-4">.</span>
+                                        </div>
+                                        <div class="col-2">
+                                            <input type="text" class=" form-control" id="txtDecimalPrice" maxlength="2"  placeholder="00">
+                                        </div>
+                                    </div>
+                                </div>
+                            }*@
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label"> Hair Challenges*</label>
+                        <div class="col-sm-10">
+                            <select class="js-example-basic-multiple form-control select2" id="hairChallenges"
+                                    asp-items="@productType.GetHairChallengesList().Result.Select(s => new SelectListItem() { Text = s.Description, Value=s.HairChallengeId.ToString()})" multiple></select>
+                        </div>
+                        @*<input type="text" id="txtType" asp-for="TypeFor" placeholder="Enter type" class="form-control">*@
+                    </div>
+
+                    @*<div class="form-group row">
+                            <label class="col-sm-2 col-form-label">Hair Challenges</label>
+
+                            <div class="col-sm-10">
+                                <input type="text" id="txtHairChallenge" asp-for="HairChallenges" placeholder="Enter hair challenges" class="form-control">
+                            </div>
+                        </div>*@
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Product Indicator*</label>
+                        <div class="col-sm-10">
+                            <select class="js-example-basic-multiple form-control select2" id="productIndicators"
+                                    asp-items="@productType.GetProductIndicatorsList().Result.Select(s => new SelectListItem() { Text = s.Description, Value=s.ProductIndicatorId.ToString()})" multiple></select>
+                        </div>
+                        @*<div class="col-sm-10">
+                                <input type="text" id="txtProductIndicator" asp-for="ProductIndicator" placeholder="Enter product indicators" class="form-control">
+                            </div>*@
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Product Tags*</label>
+
+                        <div class="col-sm-10">
+                            <select class="js-example-basic-multiple form-control select2" id="productTags"
+                                    asp-items="@productType.GetProductTagList().Result.Select(s => new SelectListItem() { Text = s.Description, Value=s.ProductTagsId.ToString()})" multiple></select>
+                        </div>
+                        <!--<div class="col-sm-10">
+                        <textarea id="txtProductTags" rows="3" asp-for="ProductTags" placeholder="Enter product tags" class="form-control"></textarea>-->
+                        @*<input type="text" id="txtProductTags" asp-for="ProductTags" placeholder="Enter product tags" class="form-control">*@
+                        <!--</div>-->
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Product Classification*</label>
+
+                        <div class="col-sm-10">
+                            <select class="js-example-basic-multiple form-control select2" id="productClassification"
+                                    asp-items="@productType.GetProductClassificationList().Result.Select(s => new SelectListItem() { Text = s.Description, Value=s.ProductClassificationId.ToString()})" multiple></select>
+                        </div>
+
+
+                        @*<div class="col-sm-10">
+                                <input type="text" id="txtProductClassification" asp-for="Product" placeholder="Enter product classification" class="form-control">
+                            </div>*@
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <a class="btn btn-white btn-sm" asp-controller="Products" asp-action="Products">Cancel</a>
+                            <button class="btn btn-primary btn-sm" onclick="SaveProduct()">Save Product</button>
+                        </div>
+                    </div>
+                    @*</form>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/admin/Product.js"></script>
+
+<script>
+    $(document).ready(function () {
+        var id = $('#stylistId').val();
+        if (id != 0) {
+            var stylistAdminModel = {
+                guid: $('#productid').val()
+            }
+            $('.preloader').css('display', 'block');
+            $.ajax({
+                type: "POST",
+                url: "/Products/ProductAdmin",
+                data: stylistAdminModel,
+                success: function (response) {
+                    if (response != null) {
+                        // consolse.log(response.price.split('.'));
+                        $('#productType').val(response.productTypesId);
+                        $('#txtProductName ').val(response.productName);
+
+                        $('#txtActualName').val(response.actualName);
+                        $('#txtBrandName').val(response.brandName);
+
+
+                        var hairType = response.productCommons.length;
+                        if (hairType > 0) {
+                            var arr = [];
+                            for (var i = 0; i < hairType; i++) {
+                                arr.push(response.productCommons[i].hairTypeId);
+                            }
+                            $('#hairType').val(arr);
+                            $('#hairType').trigger('change');
+                        }
+
+                        $('#image').val(response.imageName);
+                        $('#txtImageName').text(response.imageName.substring(response.imageName.lastIndexOf('/') +  1));
+                        $('#txtIngredients').val(response.ingredients);
+                        $('#txtProductDetails ').val(response.productDetails);
+
+                        $('#txtProductLink').val(response.productLink);
+
+                        var hairChallenges = response.productCommons.length;
+                        if (hairChallenges > 0) {
+                            var arr = [];
+                            for (var i = 0; i < hairChallenges; i++) {
+                                arr.push(response.productCommons[i].hairChallengeId);
+                            }
+                            $('#hairChallenges').val(arr);
+                            $('#hairChallenges').trigger('change');
+                        }
+
+
+                        var prodcutIndicators = response.productCommons.length;
+                        if (prodcutIndicators > 0) {
+                            var arr = [];
+                            for (var i = 0; i < prodcutIndicators; i++) {
+                                arr.push(response.productCommons[i].productIndicatorId);
+                            }
+                            $('#productIndicators').val(arr);
+                            $('#productIndicators').trigger('change');
+                        }
+
+                        var prodcutTags = response.productCommons.length;
+                        if (prodcutTags > 0) {
+                            var arr = [];
+                            for (var i = 0; i < prodcutTags; i++) {
+                                arr.push(response.productCommons[i].productTagsId);
+                            }
+                            $('#productTags').val(arr);
+                            $('#productTags').trigger('change');
+                        }
+
+                        var prodcutClassifications = response.productCommons.length;
+                        if (prodcutClassifications > 0) {
+                            var arr = [];
+                            for (var i = 0; i < prodcutClassifications; i++) {
+                                arr.push(response.productCommons[i].productClassificationId);
+                            }
+                            $('#productClassification').val(arr);
+                            $('#productClassification').trigger('change');
+                        }
+
+                        $('#txtActualPrice').val(response.actualPrice);
+                        $('#txtDecimalPrice').val(response.decimalPrice);
+                    }
+                    $('.preloader').css('display', 'none');
+                },
+                error: function (response) {
+
+                },
+                complete: function () {
+
+                }
+            });
+        }
+    });
+</script>

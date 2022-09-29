@@ -1,0 +1,257 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper AuthoringTagHelpers.TagHelpers.EmailTagHelper, AuthoringTagHelpers
+@model MyavanaAdminModels.MediaLinkEntityModel
+@inject MyavanaAdminApiClient.ApiClient category
+
+@{
+    Layout = "_Layout";
+    var categories = category.GetVideoCategories();
+}
+
+@if (Model != null)
+{
+<input type="hidden" id="medaiLinkId" value="@Model.Id" />
+}
+
+<style>
+    .preloader {
+        width: calc(100% - 200px);
+        height: 100%;
+        top: 0px;
+        position: fixed;
+        z-index: 99999;
+        background: rgba(255, 255, 255, .8);
+    }
+
+        .preloader img {
+            position: absolute;
+            LEFT: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+        }
+
+    .loader {
+        overflow: visible;
+        padding-top: 2em;
+        height: 0;
+        width: 2em;
+    }
+
+    .alert-success, .alert-danger, .alert-info {
+        top: 110px !important;
+        width: 60% !important;
+        margin: 0 auto;
+        z-index: 99;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-40%);
+        text-align: center;
+        padding: 12px;
+        transition: all 1s linear;
+        box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        color: #80172a;
+        background-color: #fdd5dc;
+        border-color: #fcc4ce;
+    }
+
+        .alert-danger hr {
+            border-top-color: #fbacba;
+        }
+
+        .alert-danger .alert-link {
+            color: #550f1c;
+        }
+
+    .alert-success {
+        color: #1c6356;
+        background-color: #a8ffc3;
+        border-color: #13b755;
+    }
+
+        .alert-success hr {
+            border-top-color: #b4e7dd;
+        }
+
+        .alert-success .alert-link {
+            color: #113b33;
+        }
+</style>
+<div id="alert-success" class="alert alert-success alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span id="successMessage"></span>
+</div>
+<div class="alert alert-danger alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span id="failureMessage"></span>
+</div>
+
+<div class="preloader" style="display:none;">
+    <div class="loader">
+        <img src="~/images/loader.gif" />
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Post Video</h5>
+
+                </div>
+                <div class="ibox-content">
+                    <div class="form-group  row">
+                        <label class="col-sm-2 col-form-label">Media Categories*</label>
+                        <div class="col-sm-10">
+                            <select class="js-example-basic-multiple form-control select2" id="videoCategory"
+                                    asp-items="@categories.Result.Select(s => new SelectListItem() { Text = s.Description, Value=s.Id.ToString()})">
+                                <option value="">Select Type</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group  row">
+                        <label class="col-sm-2 col-form-label">Video*</label>
+                        <div class="col-sm-10">
+                            <input type="text" id="txtVideo" placeholder="Enter Video URL" asp-for="VideoId" class="form-control">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Description*</label>
+                        <div class="col-sm-10">
+                            <textarea id="txtDescription" rows="4" asp-for="Description" style="width:100%" placeholder="Write something"></textarea>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <label class="col-sm-2 col-form-label">Title*</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" id="txtTitle" placeholder="Enter Title" asp-for="Title" class="form-control">
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+
+                    <div class="form-group row">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <a class="btn btn-white btn-sm" asp-controller="SocialMedia" asp-action="EducationalVideos">Cancel</a>
+                            <button class="btn btn-primary btn-sm" onclick="SaveMediaLink()">Save Video</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var imagedata = new FormData();
+    var videothumbnail = null;
+    function SaveMediaLink() {
+        if ($('#txtVideo').val().trim() == "" || $('#txtDescription').val().trim() == "" || $('#txtTitle').val().trim() == "") {
+            $('#failureMessage').text("Fields can't be empty!");
+            $('.alert-danger').css("display", "block");
+            $('.alert-danger').delay(3000).fadeOut();
+            return false;
+        }
+        if ($('#videoCategory').val() == "")
+        {
+            $('#failureMessage').text("Please select category!");
+            $('.alert-danger').css("display", "block");
+            $('.alert-danger').delay(3000).fadeOut();
+            return false;
+        }
+        if ($('#txtVideo').val().includes('youtube')) {
+            if (! /^(https|http):\/\/?(?:www\.)?youtube\.com\/.(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]*)/.test($('#txtVideo').val().trim())) {
+                $('#failureMessage').text("Wrong UrL!");
+                $('.alert-danger').css("display", "block");
+                $('.alert-danger').delay(3000).fadeOut();
+                return false;
+            }
+        } else {
+            if (! /^(https|http):\/\/?(?:www\.)?instagram\.com\/.(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]*)/.test($('#txtVideo').val().trim())) {
+                $('#failureMessage').text("Wrong UrL!");
+                $('.alert-danger').css("display", "block");
+                $('.alert-danger').delay(3000).fadeOut();
+                return false;
+            }
+        }
+
+        if (/^(https|http):\/\/?(?:www\.)?instagram\.com\/.(?:(?:\w)*#!\/)?(?:pages\/)?(?:[\w\-]*\/)*([\w\-\.]*)/.test($('#txtVideo').val().trim())) {
+            var videosrc = $('#txtVideo').val().trim().substring(0, $('#txtVideo').val().trim().lastIndexOf('/'));
+            var videourl = videosrc + "/?__a=1";
+            SaveVideos(videourl);
+            //var thumbnail = {
+            //    videourl: videourl
+            //}
+            //$.ajax({
+            //    type: "POST",
+            //    url: "/SocialMedia/VideoThumbnail",
+            //    data: thumbnail,
+            //    success: function (response) {
+            //        if (response != null) {
+            //            videothumbnail = "http://admin.myavana.com/Thumbnails/" + response;
+            //            SaveVideos();
+            //        }
+            //        else {
+            //            $('#failureMessage').text("Thumbnail not created");
+            //            $('.alert-danger').css("display", "block");
+            //            $('.alert-danger').delay(3000).fadeOut();
+            //            return false;
+            //        }
+            //    },
+            //    error: function (res) {
+            //    }
+            //});
+
+        }
+
+        else {
+            SaveVideos();
+        }
+       
+
+    }
+
+    function SaveVideos(videourl) {
+        var mediaLinkEntityModel = {
+            Id: $('#medaiLinkId').val(),
+            VideoId: $('#txtVideo').val().trim(),
+            Description: $("#txtDescription").val().trim(),
+            Title: $("#txtTitle").val().trim(),
+            CategoryId: $('#videoCategory').val(),
+            ImageLink: videourl
+        }
+        $('.preloader').css('display', 'block');
+
+        $.ajax({
+            type: "POST",
+            url: "/SocialMedia/CreateVideo",
+            data: mediaLinkEntityModel,
+            success: function (response) {
+                if (response == "1") {
+                    $('#successMessage').text("Video saved/updated successfully !");
+                    $('.alert-success').css("display", "block");
+                    $('.alert-success').delay(3000).fadeOut();
+                    setTimeout(function () { window.location.href = '/SocialMedia/EducationalVideos'; }, 3000);
+                }
+                else {
+                    $('#failureMessage').text("Oops something goes wrong !");
+                    $('.alert-danger').css("display", "block");
+                    $('.alert-danger').delay(3000).fadeOut();
+                }
+                $('.preloader').css('display', 'none');
+
+            },
+        });
+    }
+</script>
+
+@*<script src="~/js/admin/MediaLink.js"></script>*@

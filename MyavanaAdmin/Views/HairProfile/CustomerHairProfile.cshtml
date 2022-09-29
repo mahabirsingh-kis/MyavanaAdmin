@@ -1,0 +1,2029 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper AuthoringTagHelpers.TagHelpers.EmailTagHelper, AuthoringTagHelpers
+@model MyavanaAdminModels.HairProfileCustomerModel
+
+@{
+    Layout = "_Layout";
+
+    var count = 0;
+}
+
+<link href="~/css/styleCustomer.css" rel="stylesheet" />
+<link href="~/css/owl.carousel.min.css" rel="stylesheet" />
+<link href="~/css/owl.theme.default.css" rel="stylesheet" />
+<link href="~/css/jquery.nailthumb.1.1.min.css" rel="stylesheet" type="text/css">
+<script src="~/js/shadowbox.js"></script>
+<script src="~/js/jquery.nailthumb.1.1.min.js"></script>
+<link href="~/css/shadowbox.css" rel="stylesheet" />
+<style>
+    .txtFormat {
+        white-space: pre-line;
+        white-space: pre-wrap;
+        border: none;
+    }
+
+        .txtFormat:focus {
+            outline: none;
+        }
+
+    .alert-success, .alert-danger, .alert-info {
+        top: 110px !important;
+        width: 60% !important;
+        margin: 0 auto;
+        z-index: 99;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-40%);
+        text-align: center;
+        padding: 12px;
+        transition: all 1s linear;
+        box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        color: #80172a;
+        background-color: #fdd5dc;
+        border-color: #fcc4ce;
+    }
+
+        .alert-danger hr {
+            border-top-color: #fbacba;
+        }
+
+        .alert-danger .alert-link {
+            color: #550f1c;
+        }
+
+    .alert-success {
+        color: #1c6356;
+        background-color: #a8ffc3;
+        border-color: #13b755;
+    }
+
+        .alert-success hr {
+            border-top-color: #b4e7dd;
+        }
+
+        .alert-success .alert-link {
+            color: #113b33;
+        }
+
+    .select2-container, .select2-container li.select2-search {
+        width: 100% !important;
+    }
+
+    .preloader {
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        position: fixed;
+        z-index: 99999;
+        background: rgba(255, 255, 255, .8);
+    }
+
+        .preloader img {
+            position: absolute;
+            LEFT: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+        }
+
+    .loader {
+        overflow: visible;
+        padding-top: 2em;
+        height: 0;
+        width: 2em;
+    }
+
+    .centertextdiv {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: calc(100% - 80px);
+    }
+
+        .centertextdiv a {
+            background: #ffdede;
+            padding: 7px 15px;
+            color: #383838;
+            border-radius: 4px;
+            border: 1px solid #ffbaba;
+            text-transform: uppercase;
+        }
+
+            .centertextdiv a:hover {
+                background: #383838;
+                color: #ffdede;
+                border: 1px solid #ffdede;
+            }
+
+        .centertextdiv p {
+            font-size: 16px;
+            margin-bottom: 30px;
+        }
+
+    .accordion-toggle:after {
+        font-family: 'FontAwesome';
+        content: "\f078";
+        float: right;
+    }
+
+    .accordion-opened .accordion-toggle:after {
+        content: "\f054";
+    }
+
+    #accordion2 .accordion-heading {
+        padding: 6px 15px;
+        margin-bottom: 5px;
+        border-radius: 4px;
+    }
+
+    #accordion21 .accordion-heading {
+        padding: 6px 15px;
+        margin-bottom: 5px;
+        border-radius: 4px;
+    }
+
+    .products_tab .nav-link.active {
+        background: #756966;
+    }
+
+    .products_tab .nav-link {
+        color: #756966;
+    }
+
+        .products_tab .nav-link:hover {
+            background: #756966;
+            color: #fff;
+        }
+
+    .listhead {
+        border-bottom: 1px solid #ccc;
+        padding-bottom: 5px;
+        margin-bottom: 20px;
+    }
+
+    .boservationsubparts {
+        display: flex;
+        align-items: baseline;
+    }
+
+        .boservationsubparts h4 {
+            width: 30%;
+            text-align: right;
+        }
+
+    .Observations .boservationsubparts p {
+        background: #ffefee;
+        padding: 10px 15px;
+        border-radius: 4px;
+        margin-left: 10px;
+    }
+
+    .Porositynelasticity {
+        border-top: 1px solid #ccc;
+        padding-top: 20px;
+        margin-top: 20px;
+    }
+
+    .stylistcrousel .hairsteps {
+        box-shadow: 0 1px 6px 0 rgba(32, 33, 36, .28);
+        left: 0;
+        padding: 15px;
+        border-radius: 4px;
+        background: #eee;
+    }
+
+        .stylistcrousel .hairsteps p {
+            word-break: break-word;
+        }
+
+    .textFormat {
+        white-space: pre-wrap;
+    }
+
+    .table-id-data th {
+        width: 90px;
+    }
+
+    .demo {
+        width: 150px;
+        height: 150px;
+        background-position: center center;
+        background-repeat: no-repeat;
+        display: inline-block;
+    }
+
+    .tab-section {
+        padding: 20px 0;
+    }
+
+        .tab-section .nav-pills .nav-link.active {
+            background: #E9C6C6;
+            color: #383838;
+            font-weight: bold;
+        }
+
+        .tab-section .nav-pills .nav-link {
+            color: #707070;
+            font-size: 18px;
+            position: relative;
+            border: none;
+            width: 24%;
+            /* background: #d8d9e3; */
+            margin-left: 1%;
+            border-radius: 3px;
+            text-align: center;
+            line-height: normal;
+            padding: 10px;
+            min-height: 58px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+            .tab-section .nav-pills .nav-link:first-child {
+                margin-left: 0;
+            }
+
+    .products_tab .nav .nav-link {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+
+        .products_tab .nav .nav-link.active:after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: auto;
+            right: -10px;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 7px solid #6d7071;
+            background: transparent;
+            transform: rotate( -90deg );
+        }
+</style>
+<div id="alert-success" class="alert alert-success alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span id="successMessage"></span>
+</div>
+<div class="alert alert-danger alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span id="failureMessage"></span>
+</div>
+
+<div class="preloader" style="display:none;">
+    <div class="loader">
+        <img src="~/images/loader.gif" />
+    </div>
+</div>
+@if (Model == null)
+{
+    @if (ViewBag.IsExist)
+    {
+        <div class="centertextdiv">
+            <p> Thank you for completing your questionnaire. Your hair profile will be ready soon!</p>
+
+        </div>
+    }
+    else
+    {
+        <div class="centertextdiv">
+            <p>
+                Start your hair journey with MYAVANA and complete your hair care questionnaire now!
+            </p>
+            <div>
+                <a asp-action="start" asp-controller="Questionaire">  Start  </a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox ">
+                    <div class="ibox-title text-left">
+                        <span class="cursive-text-info">Recommendations</span>
+                        <h3 class="main-head-text-info">The Healthy Hair Care Plan</h3>
+                    </div>
+                    <div class="ibox-content">
+                        <div class="tab-section">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="nav flex-row justify-content-center nav-pills mb-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                                        <a class="nav-link lnk Tab1 active" id="v-pills-home-tab" data-toggle="pill" data-target="#v-pills-profile" role="tab" aria-selected="true">Hair Profile</a>
+                                        <a class="nav-link lnk Tab2" id="v-pills-profile-tab" data-toggle="pill" data-target="#v-pills-analysis" role="tab" aria-selected="false"> Hair Analysis</a>
+                                        <a class="nav-link lnk Tab3" id="v-pills-messages-tab" data-toggle="pill" data-target="#v-pills-products" role="tab" aria-selected="false">Recommended Products</a>
+                                        <a class="nav-link lnk Tab4" id="v-pills-settings-tab" data-toggle="pill" data-target="#v-pills-recommendations" role="tab" aria-selected="false">Other Recommendations</a>
+                                    </div>
+                                    <div class="hr-line-dashed"></div>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="tab-content" id="v-pills-tabContent">
+                                        <!--<div class="tab-pane fade show active showHide Tab1" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-home-tab">
+        <div class="form-group  row">
+
+            <div class="col-sm-6 col-form-label">
+                <h3>Uploaded photo of your hair : </h3>
+            </div>
+
+            <div class="col-sm-12 col-form-label">
+                <a class="demo nailthumb-container" rel="shadowbox[gallery]" href="@Model.UserUploadedImage" title="click to view the full image" style="display:none"></a>
+            </div>
+        </div>
+        <div class="form-group  row">
+
+            <div class="col-sm-6 col-form-label">
+                <h3>Profile : <span id="txtHairId">@Model.UserName</span></h3>
+            </div>
+
+            <div class="col-sm-12 col-form-label">
+                <h3>Hair Health Summary</h3>
+                <textarea readonly id="txtHealthSummary" rows="9" style="width:100%" class="font-bold txtFormat">@Model.HealthSummary</textarea>
+            </div>
+        </div>
+        <div class="form-group  row">
+
+            <div class="col-sm-6 col-form-label">
+                <h3>Your hair type is : </h3>
+            </div>
+
+            <div class="col-sm-12 col-form-label">
+                
+            </div>
+        </div>
+
+        <div class="form-group  row">
+            <label class="col-sm-12 col-form-label"><h3>Hair ID : @Model.HairId</h3></label>-->
+                                        @*<div class="col-sm-10">
+            <input type="text" class="form-control" id="txtHairId" placeholder="Enter ID" />
+        </div>*@
+                                        <!--<div class="col-md-12">
+                <div class="table-responsive">
+                    @if (Model.SelectedAnswers != null)
+                    {
+                        <table class="table table-bordered table-hover w-90 table-id-data">
+                            <tbody>
+                                <tr>
+                                    <th width="40%">Type - the shape of the strand and the form of the strand</th>
+                                    <td width="10%">@Model.SelectedAnswers.TypeId</td>
+                                    <td width="50%">@Model.SelectedAnswers.TypeDescription</td>
+                                </tr>
+                                <tr>
+                                    <th>Texture - the look and the feel of the strand</th>
+                                    <td>@Model.SelectedAnswers.TextureId</td>
+                                    <td>@Model.SelectedAnswers.TextureDescription</td>
+                                </tr>
+                                <tr>
+                                    <th>Health - the current physical and chemical condition of the strand</th>
+                                    <td>@Model.SelectedAnswers.HealthId</td>
+                                    <td>@Model.SelectedAnswers.HealthDescription</td>
+                                </tr>
+                                <tr>
+                                    <th>Porosity - the amount of moisture that is absorbed and retained in the hair</th>
+                                    <td>@Model.SelectedAnswers.PorosityId</td>
+                                    <td>@Model.SelectedAnswers.PorosityDescription</td>
+                                </tr>
+                                <tr>
+                                    <th>Elasticity - the ability for the strand to stretch and return to its original form</th>
+                                    <td>@Model.SelectedAnswers.ElasticityId</td>
+                                    <td>@Model.SelectedAnswers.ElasticityDescription</td>
+                                </tr>
+                                <tr>
+                                    <th>Density - the amount of hairs per square inch on the head</th>
+                                    <td>@Model.SelectedAnswers.DensityId</td>
+                                    <td>@Model.SelectedAnswers.DensityDescription</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="hr-line-dashed"></div>
+
+        <div class="form-group  row">
+            <label class="col-sm-12 col-form-label">
+                <h3> Virtual Consultation Observations </h3>
+            </label>
+            <div class="col-md-12">
+                <ul style="list-style-type:disc;">
+                    <li>Goals</li>
+                    <li>Challenges</li>
+                    <li>Hair Consultant Observations</li>
+                </ul>
+            </div>
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="tblObservation" class="table table-bordered table-hover w-50">
+                        <thead>
+                            <tr>
+                                <th>Goals</th>
+                                <th>Challenges</th>
+                            </tr>
+                        </thead>
+                        <tbody id="bdyObservation">
+
+                            @if (Model.SelectedAnswers != null)
+                            {
+                                @for (int i = 0; i < 3; i++)
+                                {
+                                    <tr>
+                                        @if (Model.SelectedAnswers.Goals != null && Model.SelectedAnswers.Goals.Count > i)
+                                        {
+                                            <td>@Model.SelectedAnswers.Goals[i]</td>
+                                        }
+                                        @if (Model.SelectedAnswers.Challenges != null && Model.SelectedAnswers.Challenges.Count > i)
+                                        {
+                                            <td>@Model.SelectedAnswers.Challenges[i]</td>
+                                        }
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-sm-12 col-form-label">
+                    <h4><strong>Hair Consultant Observations : </strong></h4>
+                    <p id="txtConsultantNotes" class="textFormat">@Model.ConsultantNotes</p>
+                </div>
+            </div>
+        </div>
+    </div>-->
+                                        <div class="tab-pane fade show active showHide Tab1" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group  row">
+
+                                                        <div class="col-sm-12 col-form-label">
+                                                            <h3 class="user-profile-name-info">Profile : <strong><span id="txtHairId"> @Model.UserName</span></strong></h3>
+                                                            <span class="upload-img-info">Uploaded photo of your hair : </span>
+                                                        </div>
+
+                                                        <div class="col-sm-12 col-form-label">
+                                                            <a class="demo nailthumb-container" rel="shadowbox[gallery]" href="@Model.UserUploadedImage" title="click to view the full image" style="display:none"></a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-8">
+
+                                                    <div class="user-profile-info">
+                                                        <h4 class="user-name-info">Tanisha Billups, Hair Analyst</h4>
+                                                        <a href="#" class="user-img-info">
+                                                            <img src="~/images/Profile Icon.png" alt="profile" />
+                                                        </a>
+
+                                                    </div>
+
+                                                    <div class="form-group  row">
+
+
+
+                                                        <div class="col-sm-12 col-form-label user-profile-description-info">
+                                                            @*<h3>Hair Health Summary</h3>*@
+                                                            <textarea readonly id="txtHealthSummary" rows="9" style="width:100%" class="font-bold txtFormat">@Model.HealthSummary</textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group  row">
+
+                                                <div class="col-sm-6 col-form-label">
+                                                    <h3>Your hair type is : </h3>
+                                                </div>
+
+                                                <div class="col-sm-12 col-form-label">
+                                                    @if (!String.IsNullOrEmpty(Model.AIResult))
+                                                    {
+                                                        foreach (var x in Model.AIResultDecoded)
+                                                        {
+                                                            <div class="hair-type-wrap">
+                                                                <div class="hair-information-wrap">
+                                                                    <div class="hair-type-info">@x.Key</div>
+                                                                    <div class="hair-value-info">
+                                                                        @x.Value.ToString().Substring(0, 5)%
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                    </div>
+                                            </div>
+                                            <div class="form-group  row">
+                                                <label class="col-sm-12 col-form-label"><h3 class="hairid-info">Hair ID : <strong>@Model.HairId</strong></h3></label>
+                                               
+                                                <div class="col-md-12">
+                                                    <div class="table-responsive">
+                                                        @if (Model.SelectedAnswers != null)
+                                                        {
+                                                            <table class="table table-bordered table-hover w-90 table-id-data">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th width="40%">Type - the shape of the strand and the form of the strand</th>
+                                                                        <td width="10%">@Model.SelectedAnswers.TypeId</td>
+                                                                        <td width="50%">@Model.SelectedAnswers.TypeDescription</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Texture - the look and the feel of the strand</th>
+                                                                        <td>@Model.SelectedAnswers.TextureId</td>
+                                                                        <td>@Model.SelectedAnswers.TextureDescription</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Health - the current physical and chemical condition of the strand</th>
+                                                                        <td>@Model.SelectedAnswers.HealthId</td>
+                                                                        <td>@Model.SelectedAnswers.HealthDescription</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Porosity - the amount of moisture that is absorbed and retained in the hair</th>
+                                                                        <td>@Model.SelectedAnswers.PorosityId</td>
+                                                                        <td>@Model.SelectedAnswers.PorosityDescription</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Elasticity - the ability for the strand to stretch and return to its original form</th>
+                                                                        <td>@Model.SelectedAnswers.ElasticityId</td>
+                                                                        <td>@Model.SelectedAnswers.ElasticityDescription</td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <th>Density - the amount of hairs per square inch on the head</th>
+                                                                        <td>@Model.SelectedAnswers.DensityId</td>
+                                                                        <td>@Model.SelectedAnswers.DensityDescription</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="hr-line-dashed"></div>
+
+                                            <div class="form-group  row">
+                                                <label class="col-sm-12 col-form-label">
+                                                    <h3 class="head-title-info"> Virtual Consultation Observations </h3>
+                                                </label>
+                                                <div class="col-md-12">
+                                                    <div class="vco-boxes-wrap">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="vco-boxes-info">
+                                                                    <div class="header-content-wrap">
+                                                                        <div class="icon-with-text-info">
+                                                                            <div class="icon-info">
+                                                                                <img src="~/images/Goals-Icon.svg" alt="goal-icon" />
+                                                                            </div>
+                                                                            <div class="txt-info">Goals</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="main-content-wrap">
+                                                                        <ul class="mc-ul-info">
+                                                                            @for (int i = 0; i < 3; i++)
+                                                                            {
+                                                                                @if (Model.SelectedAnswers != null && Model.SelectedAnswers.Goals != null && Model.SelectedAnswers.Goals.Count > i)
+                                                                                {
+                                                                                    <li>+ @Model.SelectedAnswers.Goals[i]</li>
+                                                                                }
+                                                                            }
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="vco-boxes-info">
+                                                                    <div class="header-content-wrap">
+                                                                        <div class="icon-with-text-info">
+                                                                            <div class="icon-info">
+                                                                                <img src="~/images/Challanges-Icon.svg" alt="challanges-icon" />
+                                                                            </div>
+                                                                            <div class="txt-info">Challenges</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="main-content-wrap">
+                                                                        <ul class="mc-ul-info">
+                                                                            @for (int i = 0; i < 3; i++)
+                                                                            {
+                                                                                @if (Model.SelectedAnswers != null && Model.SelectedAnswers.Challenges != null && Model.SelectedAnswers.Challenges.Count > i)
+                                                                                {
+                                                                                    <li>+ @Model.SelectedAnswers.Challenges[i]</li>
+                                                                                }
+                                                                            }
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="vco-boxes-info">
+                                                                    <div class="header-content-wrap">
+                                                                        <div class="icon-with-text-info">
+                                                                            <div class="icon-info">
+                                                                                <img src="~/images/Eye-Icon.svg" alt="eye-icon" />
+                                                                            </div>
+                                                                            <div class="txt-info">Hair Consultant Observations</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="main-content-wrap">
+                                                                        <ul class="mc-ul-info">
+                                                                            <li>+ @Model.ConsultantNotes</li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="vco-boxes-info">
+                                                                    <div class="header-content-wrap">
+                                                                        <div class="icon-with-text-info">
+                                                                            <div class="icon-info">
+                                                                                <img src="~/images/Recommend-Icon.svg" alt="Recommendations-icon" />
+                                                                            </div>
+                                                                            <div class="txt-info">Recommendations</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="main-content-wrap">
+                                                                        <ul class="mc-ul-info">
+                                                                            <li>+ Discontinue co-washing</li>
+                                                                            <li>+ Wrapping the hair in a t-shirt causes moisture loss and friction which can lead to frizz</li>
+                                                                            <li>+ Clarifing 1x a month</li>
+                                                                            <li>+ Lightweight products that provide hydration and strength to control the frizz and stop the breakage</li>
+                                                                            <li>+ Lightweight gels for the wash-n-go that keep the hair soft</li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade showHide Tab2" id="v-pills-analysis" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <h3 class="head-title-info">Photo Input</h3>
+                                                    <div class="hairphotoinput">
+                                                        <ul class="nav nav-tabs">
+                                                            <li><a data-toggle="tab" href="#home" class="active">Top Left</a></li>
+                                                            <li><a data-toggle="tab" href="#menu1">Top Right</a></li>
+                                                            <li><a data-toggle="tab" href="#menu2">Bottom Left</a></li>
+                                                            <li><a data-toggle="tab" href="#menu3">Bottom Right</a></li>
+                                                            <li><a data-toggle="tab" href="#menu4">Crown</a></li>
+                                                        </ul>
+
+
+
+                                                        <div class="tab-content">
+                                                            <div id="home" class="tab-pane fade in active show">
+                                                                <div class="row">
+                                                                    <div class="col-sm-4">
+                                                                        <div class="owl-carousel crousalslide">
+                                                                            @if (Model.TopLeft.TopLeftPhoto != null)
+                                                                            {
+                                                                                @foreach (var tLeft in Model.TopLeft.TopLeftPhoto)
+                                                                                {
+                                                                                    <div>
+                                                                                        <div class="col-md-12 p-0">
+                                                                                            <img id="TopLeftPhoto" class="w-100 img-fluid" src="@tLeft" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                }
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Recommend-Icon.svg" alt="Recommendations-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Lab Analyst Notes</div>
+                                                                            </div>
+                                                                            <!--<h4 class="listhead">Lab Analyst Notes</h4>-->
+                                                                            <div class="main-content-wrap">
+                                                                                <ul class="mc-ul-info">
+                                                                                    <li><p id="txtTopLeftStrandDiameter" class="textFormat">+  @Model.TopLeft.TopLeftStrandDiameter</p></li>
+                                                                                </ul>
+                                                                            </div>
+
+
+                                                                        </div>
+
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Hair-Profile-Icon.svg" alt="hair-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Hair Profile Health</div>
+                                                                            </div>
+
+                                                                            <div class="Observations">
+                                                                                @if (Model.TopLeft.Health != null)
+                                                                                {
+                                                                                    @foreach (var tLefthealth in Model.TopLeft.Health)
+                                                                                    {
+                                                                                        <p id="pTopLeftObservation" class="mb-1">@tLefthealth.Description</p>
+                                                                                    }
+                                                                                }
+                                                                            </div>
+
+                                                                        </div>
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Eye-Icon.svg" alt="eye-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Observation</div>
+                                                                            </div>
+                                                                            <div class="main-content-wrap">
+                                                                                <div class="main-content-info">
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">
+                                                                                            Single Strand Knots
+                                                                                        </div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopLeft.Observation != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopLeft.Observation)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Elasticity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopLeft.obsElasticities != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopLeft.obsElasticities)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Chemical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopLeft.obsChemicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopLeft.obsChemicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Physical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopLeft.obsPhysicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopLeft.obsPhysicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Splitting</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopLeft.obsSplittings != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopLeft.obsSplittings)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Porosity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopLeft.Pororsity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftPorosity">@Model.TopLeft.Pororsity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Breakage</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopLeft.obsBreakages != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopLeft.obsBreakages)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Density</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopLeft.Elasticity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftElasticity">@Model.TopLeft.Elasticity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div id="menu1" class="tab-pane fade">
+                                                                <div class="row">
+                                                                    <div class="col-sm-4">
+                                                                        <div class="owl-carousel crousalslide">
+                                                                            @if (Model.TopRight.TopRightPhoto != null)
+                                                                            {
+                                                                                @foreach (var tRight in Model.TopRight.TopRightPhoto)
+                                                                                {
+                                                                                    <div>
+                                                                                        <div class="col-md-12 p-0">
+                                                                                            <img class="w-100 img-fluid" src="@tRight" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                }
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Recommend-Icon.svg" alt="Recommendations-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Lab Analyst Notes</div>
+                                                                            </div>
+                                                                            <div class="main-content-wrap">
+                                                                                <ul class="mc-ul-info">
+                                                                                    <li><p id="txtTopRightStrandDiameter" class="textFormat">+  @Model.TopRight.TopRightStrandDiameter</p></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Hair-Profile-Icon.svg" alt="hair-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Hair Profile Health</div>
+                                                                            </div>
+                                                                            <div class="Observations">
+                                                                                @if (Model.TopRight.Health != null)
+                                                                                {
+                                                                                    @foreach (var tRighthealth in Model.TopRight.Health)
+                                                                                    {
+                                                                                        <p id="pTopLeftObservation" class="mb-1">@tRighthealth.Description</p>
+                                                                                    }
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Eye-Icon.svg" alt="eye-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Observation</div>
+                                                                            </div>
+                                                                            <div class="main-content-wrap">
+                                                                                <div class="main-content-info">
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">
+                                                                                            Single Strand Knots
+                                                                                        </div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopRight.Observation != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopRight.Observation)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Elasticity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopRight.obsElasticities != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopRight.obsElasticities)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Chemical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopRight.obsChemicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopRight.obsChemicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Physical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopRight.obsPhysicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopRight.obsPhysicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Splitting</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopRight.obsSplittings != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopRight.obsSplittings)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Porosity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopRight.Pororsity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftPorosity">@Model.TopRight.Pororsity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Breakage</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopRight.obsBreakages != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.TopRight.obsBreakages)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Density</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.TopRight.Elasticity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftElasticity">@Model.TopRight.Elasticity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div id="menu2" class="tab-pane fade">
+                                                                <div class="row">
+                                                                    <div class="col-sm-4">
+                                                                        <div class="owl-carousel crousalslide">
+                                                                            @if (Model.BottomLeft.BottomLeftPhoto != null)
+                                                                            {
+                                                                                @foreach (var bLeft in Model.BottomLeft.BottomLeftPhoto)
+                                                                                {
+                                                                                    <div>
+                                                                                        <div class="col-md-12 p-0">
+                                                                                            <img id="crownPhoto" class="w-100 img-fluid" src="@bLeft" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                }
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Recommend-Icon.svg" alt="Recommendations-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Lab Analyst Notes</div>
+                                                                            </div>
+                                                                            <!--<h4 class="listhead">Lab Analyst Notes</h4>-->
+                                                                            <div class="main-content-wrap">
+                                                                                <ul class="mc-ul-info">
+                                                                                    <li><p id="txtTopLeftStrandDiameter" class="textFormat">+  @Model.BottomLeft.BottomLeftStrandDiameter</p></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Hair-Profile-Icon.svg" alt="hair-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Hair Profile Health</div>
+                                                                            </div>
+                                                                            <div class="Observations">
+                                                                                @if (Model.BottomLeft.Health != null)
+                                                                                {
+                                                                                    @foreach (var tLefthealth in Model.BottomLeft.Health)
+                                                                                    {
+                                                                                        <p id="pTopLeftObservation" class="mb-1">@tLefthealth.Description</p>
+                                                                                    }
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Eye-Icon.svg" alt="eye-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Observation</div>
+                                                                            </div>
+                                                                            <div class="main-content-wrap">
+                                                                                <div class="main-content-info">
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">
+                                                                                            Single Strand Knots
+                                                                                        </div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomLeft.Observation != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomLeft.Observation)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Elasticity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomLeft.obsElasticities != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomLeft.obsElasticities)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Chemical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomLeft.obsChemicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomLeft.obsChemicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Physical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomLeft.obsPhysicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomLeft.obsPhysicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Splitting</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomLeft.obsSplittings != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomLeft.obsSplittings)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Porosity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomLeft.Pororsity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftPorosity">@Model.BottomLeft.Pororsity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Breakage</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomLeft.obsBreakages != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomLeft.obsBreakages)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Density</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomLeft.Elasticity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftElasticity">@Model.BottomLeft.Elasticity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div id="menu3" class="tab-pane fade">
+                                                                <div class="row">
+                                                                    <div class="col-sm-4">
+                                                                        <div class="owl-carousel crousalslide">
+                                                                            @if (Model.BottomRight.BottomRightPhoto != null)
+                                                                            {
+                                                                                @foreach (var bLeft in Model.BottomRight.BottomRightPhoto)
+                                                                                {
+                                                                                    <div>
+                                                                                        <div class="col-md-12 p-0">
+                                                                                            <img id="crownPhoto" class="w-100 img-fluid" src="@bLeft" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                }
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Recommend-Icon.svg" alt="Recommendations-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Lab Analyst Notes</div>
+                                                                            </div>
+                                                                            <!--<h4 class="listhead">Lab Analyst Notes</h4>-->
+                                                                            <div class="main-content-wrap">
+                                                                                <ul class="mc-ul-info">
+                                                                                    <li><p id="txtTopLeftStrandDiameter" class="textFormat">+  @Model.BottomRight.BottomRightStrandDiameter</p></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Hair-Profile-Icon.svg" alt="hair-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Hair Profile Health</div>
+                                                                            </div>
+                                                                            <div class="Observations">
+                                                                                @if (Model.BottomRight.Health != null)
+                                                                                {
+                                                                                    @foreach (var tLefthealth in Model.BottomRight.Health)
+                                                                                    {
+                                                                                        <p id="pTopLeftObservation" class="mb-1">@tLefthealth.Description</p>
+                                                                                    }
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Eye-Icon.svg" alt="eye-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Observation</div>
+                                                                            </div>
+                                                                            <div class="main-content-wrap">
+                                                                                <div class="main-content-info">
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">
+                                                                                            Single Strand Knots
+                                                                                        </div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomRight.Observation != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomRight.Observation)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Elasticity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomRight.obsElasticities != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomRight.obsElasticities)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Chemical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomRight.obsChemicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomRight.obsChemicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Physical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomRight.obsPhysicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomRight.obsPhysicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Splitting</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomRight.obsSplittings != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomRight.obsSplittings)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Porosity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomRight.Pororsity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftPorosity">@Model.BottomRight.Pororsity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Breakage</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomRight.obsBreakages != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.BottomRight.obsBreakages)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Density</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.BottomRight.Elasticity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftElasticity">@Model.BottomRight.Elasticity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div id="menu4" class="tab-pane fade">
+                                                                <div class="row">
+                                                                    <div class="col-sm-4">
+                                                                        <div class="owl-carousel crousalslide">
+                                                                            @if (Model.CrownStrand.CrownPhoto != null)
+                                                                            {
+                                                                                @foreach (var bLeft in Model.CrownStrand.CrownPhoto)
+                                                                                {
+                                                                                    <div>
+                                                                                        <div class="col-md-12 p-0">
+                                                                                            <img id="crownPhoto" class="w-100 img-fluid" src="@bLeft" />
+                                                                                        </div>
+                                                                                    </div>
+                                                                                }
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+
+                                                                    <div class="col-md-8">
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Recommend-Icon.svg" alt="Recommendations-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Lab Analyst Notes</div>
+                                                                            </div>
+                                                                            <!--<h4 class="listhead">Lab Analyst Notes</h4>-->
+                                                                            <div class="main-content-wrap">
+                                                                                <ul class="mc-ul-info">
+                                                                                    <li><p id="txtTopLeftStrandDiameter" class="textFormat">+  @Model.CrownStrand.CrownStrandDiameter</p></li>
+                                                                                </ul>
+                                                                            </div>
+                                                                        </div>
+
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Hair-Profile-Icon.svg" alt="hair-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Hair Profile Health</div>
+                                                                            </div>
+                                                                            <div class="Observations">
+                                                                                @if (Model.CrownStrand.Health != null)
+                                                                                {
+                                                                                    @foreach (var tLefthealth in Model.CrownStrand.Health)
+                                                                                    {
+                                                                                        <p id="pTopLeftObservation" class="mb-1">@tLefthealth.Description</p>
+                                                                                    }
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Eye-Icon.svg" alt="eye-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">Observation</div>
+                                                                            </div>
+                                                                            <div class="main-content-wrap">
+                                                                                <div class="main-content-info">
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">
+                                                                                            Single Strand Knots
+                                                                                        </div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.CrownStrand.Observation != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.CrownStrand.Observation)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Elasticity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.CrownStrand.obsElasticities != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.CrownStrand.obsElasticities)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Chemical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.CrownStrand.obsChemicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.CrownStrand.obsChemicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Physical Products Buildup</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.CrownStrand.obsPhysicalProducts != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.CrownStrand.obsPhysicalProducts)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Splitting</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.CrownStrand.obsSplittings != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.CrownStrand.obsSplittings)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Porosity</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.CrownStrand.Pororsity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftPorosity">@Model.CrownStrand.Pororsity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Breakage</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.CrownStrand.obsBreakages != null)
+                                                                                            {
+                                                                                                @foreach (var tLeftObs in Model.CrownStrand.obsBreakages)
+                                                                                                {
+                                                                                                    <span class="txt-info" id="pTopLeftObservation">@tLeftObs.Description</span>
+                                                                                                }
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="data-wrap">
+                                                                                        <div class="data-info data-1">Density</div>
+                                                                                        <div class="data-info data-2">
+                                                                                            @if (Model.CrownStrand.Elasticity != null)
+                                                                                            {
+                                                                                                <span class="txt-info" id="pTopLeftElasticity">@Model.CrownStrand.Elasticity.Description</span>
+                                                                                            }
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane fade showHide Tab3" id="v-pills-products" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+                                            <div class="recommended-products-wrap">
+                                                <div class="recommended-products-info">
+                                                    <h3 class="head-title-info">Essential Products</h3>
+                                                    <ul class="nav nav-tabs">
+                                                        @{int p = 0;}
+                                                        @foreach (var rProd in Model.RecommendedProducts)
+                                                        {
+                                                            if (p == 0)
+                                                            {
+                                                                <li><a data-toggle="tab" href="#prd_@p" class="active">@rProd.ProductParentName</a></li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li><a data-toggle="tab" href="#prd_@p">@rProd.ProductParentName</a></li>
+                                                            }
+                                                            p++;
+                                                        }
+                                                        @{ p = 0;
+                                                        }
+                                                    </ul>
+
+
+                                                    <div class="tab-content">
+                                                        @foreach (var rProd in Model.RecommendedProducts)
+                                                        {
+                                                            @foreach (var product in rProd.ProductsTypes)
+                                                            {
+                                                                if (p == 0)
+                                                                {
+                                                                    <div id="prd_@p" class="tab-pane fade in active show">
+                                                                        <div class="box-shapes-wrap rp-box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Shampoo-Icon.svg" alt="shampoo-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">@product.ProductTypeName</div>
+                                                                            </div>
+                                                                            @foreach (var prod in product.Products)
+                                                                            {
+                                                                                <div class="main-content-wrap">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="product-image-wrap">
+                                                                                                <div class="product-img-info">
+                                                                                                    <img src="@prod.ImageName" alt="img1" class="img-fluid" />
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-8">
+                                                                                            <div class="product-description-wrap">
+                                                                                                <span class="product-sub-title-info">Brand Name: @prod.BrandName</span>
+                                                                                                <h3 class="product-main-title-info">@prod.ProductName</h3>
+                                                                                                <p class="product-descrp-info">@prod.ProductDetails</p>
+                                                                                                -<a target="_blank" href="@prod.ProductLink" class="view-product-info">View Product > </a>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div id="prd_@p" class="tab-pane fade">
+                                                                        <div class="box-shapes-wrap rp-box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Shampoo-Icon.svg" alt="shampoo-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">@product.ProductTypeName</div>
+                                                                            </div>
+                                                                            @foreach (var prod in product.Products)
+                                                                            {
+                                                                                <div class="main-content-wrap">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="product-image-wrap">
+                                                                                                <div class="product-img-info">
+                                                                                                    <img src="@prod.ImageName" alt="img1" class="img-fluid" />
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-8">
+                                                                                            <div class="product-description-wrap">
+                                                                                                <span class="product-sub-title-info">Brand Name: @prod.BrandName</span>
+                                                                                                <h3 class="product-main-title-info">@prod.ProductName</h3>
+                                                                                                <p class="product-descrp-info">@prod.ProductDetails</p>
+                                                                                                -<a target="_blank" href="@prod.ProductLink" class="view-product-info">View Product > </a>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+
+                                                                    </div>
+                                                                }
+                                                                p++;
+                                                            }
+                                                        }
+                                                    </div>
+
+                                                    <h3 class="head-title-info">Styling Products</h3>
+                                                    <ul class="nav nav-tabs">
+                                                        @{ int s = 0;}
+                                                        @foreach (var rProd in Model.RecommendedProductsStyling)
+                                                        {
+                                                            if (s == 0)
+                                                            {
+                                                                <li><a data-toggle="tab" href="#prds_@s" class="active">@rProd.ProductParentName</a></li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li><a data-toggle="tab" href="#prds_@s">@rProd.ProductParentName</a></li>
+                                                            }
+                                                            s++;
+                                                        }
+                                                        @{ s = 0; }
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        @foreach (var rProd in Model.RecommendedProductsStyling)
+                                                        {
+
+                                                            @foreach (var product in rProd.ProductsTypes)
+                                                            {
+                                                                if (s == 0)
+                                                                {
+                                                                    <div id="prds_@s" class="tab-pane fade in active show">
+                                                                        <div class="box-shapes-wrap rp-box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Leave-In-Conditioner-icon.svg" alt="conditioner-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">@product.ProductTypeName</div>
+                                                                            </div>
+                                                                            @foreach (var prod in product.Products)
+                                                                            {
+                                                                                <div class="main-content-wrap">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="product-image-wrap">
+                                                                                                <div class="product-img-info">
+                                                                                                    <img src="~/images/img2.png" alt="img2" class="img-fluid" />
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-8">
+                                                                                            <div class="product-description-wrap">
+                                                                                                <span class="product-sub-title-info">Brand Name: @prod.BrandName</span>
+                                                                                                <h3 class="product-main-title-info">@prod.ProductName</h3>
+                                                                                                <p class="product-descrp-info">@prod.ProductDetails</p>
+
+                                                                                                <a href="@prod.ProductLink" class="view-product-info">View Product > </a>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+
+                                                                    </div>
+                                                                }
+                                                                else
+                                                                {
+                                                                    <div id="prds_@s" class="tab-pane fade">
+                                                                        <div class="box-shapes-wrap rp-box-shapes-wrap">
+                                                                            <div class="icon-with-text-info">
+                                                                                <div class="icon-info">
+                                                                                    <img src="/images/Leave-In-Conditioner-icon.svg" alt="conditioner-icon">
+                                                                                </div>
+                                                                                <div class="txt-info">@product.ProductTypeName</div>
+                                                                            </div>
+                                                                            @foreach (var prod in product.Products)
+                                                                            {
+                                                                                <div class="main-content-wrap">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-4">
+                                                                                            <div class="product-image-wrap">
+                                                                                                <div class="product-img-info">
+                                                                                                    <img src="~/images/img2.png" alt="img2" class="img-fluid" />
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="col-md-8">
+                                                                                            <div class="product-description-wrap">
+                                                                                                <span class="product-sub-title-info">Brand Name: @prod.BrandName</span>
+                                                                                                <h3 class="product-main-title-info">@prod.ProductName</h3>
+                                                                                                <p class="product-descrp-info">@prod.ProductDetails</p>
+
+                                                                                                <a href="@prod.ProductLink" class="view-product-info">View Product</a>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            }
+                                                                        </div>
+                                                                    </div>
+                                                                }
+                                                                s++;
+                                                            }}
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="tab-pane fade showHide Tab4" id="v-pills-recommendations" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                                            <div class="col-md-12">
+                                                <!--<h3>Ingredients</h3>-->
+                                                <h3 class="head-title-info">Ingredients</h3>
+                                                <p class="sub-para-info">
+                                                    These important ingredients help to address hair challenges and achieve hair goals. Some may be used for natural hair treatments and can also be found in product formulas for your texture, type, and condition.
+                                                </p>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="owl-carousel crousalnav ingredients-content-wrap">
+                                                            @foreach (var rIng in Model.RecommendedIngredients)
+                                                            {
+                                                                @foreach (var ingr in rIng.Ingredients)
+                                                                {
+                                                                    <div>
+                                                                        <div class="sliderimg">
+
+                                                                            <img src="@ingr.ImageName" class="img-fluid w-100 mb-3" />
+                                                                        </div>
+                                                                        <h3 class="product-main-title-info">@ingr.Name</h3>
+                                                                        <p class="mb-1 product-descrp-info">@ingr.Description</p>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="form-group  row cmt-5">
+
+                                                    <div class="col-md-12 ">
+
+                                                        <h3 class="head-title-info">Tools</h3>
+                                                        <p class="sub-para-info">
+                                                            These tools help to address hair challenges and achieve hair goals.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="owl-carousel crousalnav">
+                                                            @foreach (var rctl in Model.RecommendedTools)
+                                                            {
+                                                                @foreach (var tl in rctl.ToolList)
+                                                                {
+                                                                    <div>
+                                                                        <div class="sliderimg">
+
+                                                                            <img src="@tl.ImageName" class="img-fluid w-100 mb-3" />
+                                                                        </div>
+                                                                        <h3 class="product-main-title-info">@tl.Name</h3>
+                                                                        <p class="mb-1 product-descrp-info">@tl.ToolDetail</p>
+                                                                    </div>
+                                                                }
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12 ">
+
+                                                <div class="or-regimens-wrap cmt-5">
+
+
+                                                    <h3 class="head-title-info">Regimens</h3>
+                                                    <ul class="nav nav-tabs border-0">
+                                                        @{ int r = 0; }
+                                                        @foreach (var recommendedRegimen in Model.RecommendedRegimens)
+                                                        {
+                                                            @if (r == 0)
+                                                            {
+                                                                <li><a data-toggle="tab" href="#reg_@r" class="active">@recommendedRegimen.RegimenTitle</a></li>
+                                                            }
+                                                            else
+                                                            {
+                                                                <li><a data-toggle="tab" href="#reg_@r">@recommendedRegimen.RegimenTitle</a></li>
+                                                            }
+                                                            r++;
+                                                        }
+                                                        @{ r = 0;}
+
+                                                    </ul>
+                                                    <div class="tab-content">
+                                                        @foreach (var recommendedRegimen in Model.RecommendedRegimens)
+                                                        {
+
+                                                            @if (r == 0)
+                                                            {
+                                                                <div id="reg_@r" class="tab-pane fade in active show">
+                                                                    <div class="regimens-steps-wrap">
+                                                                        <div class="header-wrap">
+                                                                            <h5 class="head-product-info">@recommendedRegimen.Description</h5>
+                                                                        </div>
+                                                                        <div class="main-steps-content-wrap">
+
+                                                                            <div class="owl-carousel crousalnav">
+                                                                                @if (recommendedRegimen.RegimenSteps != null)
+                                                                                {
+                                                                                    @foreach (var reg in recommendedRegimen.RegimenSteps)
+                                                                                    {
+                                                                                        count = count + 1;
+                                                                                        <div class="item">
+                                                                                            <div class="main-steps-content-info">
+                                                                                                <div class="steps-img-info">
+                                                                                                    <img src="@reg.RegimenStepPhoto" alt="s1" />
+                                                                                                </div>
+                                                                                                <div class="steps-value-info">Step @count</div>
+                                                                                                <div class="steps-content-info product-descrp-info">@reg.RegimenStepInstruction</div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    }
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div id="reg_@r" class="tab-pane fade">
+                                                                    <div class="regimens-steps-wrap">
+                                                                        <div class="header-wrap">
+                                                                            <h5 class="head-product-info">@recommendedRegimen.Description</h5>
+                                                                        </div>
+                                                                        <div class="main-steps-content-wrap">
+
+                                                                            <div class="owl-carousel crousalnav">
+                                                                                @if (recommendedRegimen.RegimenSteps != null)
+                                                                                {
+                                                                                    @foreach (var reg in recommendedRegimen.RegimenSteps)
+                                                                                    {
+                                                                                        count = count + 1;
+                                                                                        <div class="item">
+                                                                                            <div class="main-steps-content-info">
+                                                                                                <div class="steps-img-info">
+                                                                                                    <img src="@reg.RegimenStepPhoto" alt="s1" />
+                                                                                                </div>
+                                                                                                <div class="steps-value-info">Step @count</div>
+                                                                                                <div class="steps-content-info product-descrp-info">@reg.RegimenStepInstruction</div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    }
+                                                                                }
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            }
+                                                            r++;
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script src="~/js/owl.carousel.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".showHide2:first").addClass('active');
+        $('.showHide2Active:first').addClass('active');
+        $('.showHide2Active:first').addClass('show');
+    });
+
+    function showHide(sender) {
+        var id = $(sender).attr('href');
+        $('.showHide2Active').removeClass('active');
+        $('.showHide2Active').removeClass('show');
+        $('.showHide2').removeClass('active');
+        $(sender).addClass('active');
+        $(id).addClass('active');
+        $(id).addClass('show');
+    }
+
+    $(document).ready(function () {
+        $(".showHide1:first").addClass('active');
+        $('.showHide1Active:first').addClass('active');
+        $('.showHide1Active:first').addClass('show');
+    });
+
+    function showHide1(sender) {
+        var id = $(sender).attr('href');
+        $('.showHide1Active').removeClass('active');
+        $('.showHide1Active').removeClass('show');
+        $('.showHide1').removeClass('active');
+        $(sender).addClass('active');
+        $(id).addClass('active');
+        $(id).addClass('show');
+    }
+
+    $('.crousalnav').owlCarousel({
+        loop: false,
+        center: false,
+        margin: 20,
+        responsiveClass: true,
+        responsive: {
+            0: {
+                items: 1,
+                nav: true,
+                loop: false
+            },
+            600: {
+                items: 1,
+                nav: true,
+                loop: false
+            },
+            1000: {
+                items: 3,
+                nav: true,
+                loop: false
+            }
+        }
+    })
+</script>
+<script>
+    $('.owl-carousel').owlCarousel({
+        loop: true,
+        margin: 00,
+        responsiveClass: true,
+        responsive: {
+            0: {
+                items: 1,
+                nav: true,
+                loop: true
+            },
+            600: {
+                items: 1,
+                nav: true,
+                loop: true
+            },
+            1000: {
+                items: 1,
+                nav: true,
+                loop: true
+            }
+        }
+    })
+</script>
+<script>
+    $('.crousalslide').owlCarousel({
+        loop: true,
+        margin: 00,
+        responsiveClass: true,
+        responsive: {
+            0: {
+                items: 1,
+                nav: true,
+                loop: true
+            },
+            600: {
+                items: 1,
+                nav: true,
+                loop: true
+            },
+            1000: {
+                items: 1,
+                nav: true,
+                loop: true
+            }
+        }
+    })
+</script>
+<script>
+    /**
+  * EFECTO PARA FLECHAS EN ACORDEON
+  */
+
+    $(document).on('show', '.accordion', function (e) {
+        //$('.accordion-heading i').toggleClass(' ');
+        $(e.target).prev('.accordion-heading').addClass('accordion-opened');
+    });
+
+    $(document).on('hide', '.accordion', function (e) {
+        $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
+        //$('.accordion-heading i').toggleClass('fa-chevron-right fa-chevron-down');
+    });
+</script>
+<script>
+
+    $(document).on('show', '.accordion', function (e) {
+        //$('.accordion-heading i').toggleClass(' ');
+        $(e.target).prev('.accordion-heading').addClass('accordion-opened');
+    });
+
+    $(document).on('hide', '.accordion', function (e) {
+        $(this).find('.accordion-heading').not($(e.target)).removeClass('accordion-opened');
+        //$('.accordion-heading i').toggleClass('fa-chevron-right fa-chevron-down');
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $(".showHide:first").addClass('active');
+        $('.showHideActive:first').addClass('active');
+        $('.showHideActive:first').addClass('show');
+        $('.demo').nailthumb({
+            imageCustomFinder: function (el) {
+                var image = $('<img />').attr('src', el.attr('href').replace('/full/', '/small/')).css('display', 'none');
+                image.attr('alt', el.attr('title'));
+                el.append(image);
+                return image;
+            },
+            titleAttr: 'alt'
+        });
+
+
+
+    });
+    jQuery.fn.load = function (callback) {
+        $(window).on("load", function () {
+            Shadowbox.init();
+            $('.demo').css("display", "block");
+        })
+
+    };
+
+</script>

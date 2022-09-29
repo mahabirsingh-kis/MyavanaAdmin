@@ -1,0 +1,422 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper AuthoringTagHelpers.TagHelpers.EmailTagHelper, AuthoringTagHelpers
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+@using DataTables.AspNetCore.Mvc
+@model MyavanaAdminModels.QuestionnaireCustomerList
+@{
+    Layout = "_Layout";
+}
+
+
+<style>
+    .alert-success, .alert-danger, .alert-info {
+        top: 110px !important;
+        width: 60% !important;
+        margin: 0 auto;
+        z-index: 99;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-40%);
+        text-align: center;
+        padding: 12px;
+        transition: all 1s linear;
+        box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        color: #80172a;
+        background-color: #fdd5dc;
+        border-color: #fcc4ce;
+    }
+
+        .alert-danger hr {
+            border-top-color: #fbacba;
+        }
+
+        .alert-danger .alert-link {
+            color: #550f1c;
+        }
+
+    .alert-success {
+        color: #1c6356;
+        background-color: #a8ffc3;
+        border-color: #13b755;
+    }
+
+        .alert-success hr {
+            border-top-color: #b4e7dd;
+        }
+
+        .alert-success .alert-link {
+            color: #113b33;
+        }
+
+    .preloader {
+        width: calc(100% - 200px);
+        height: 100%;
+        top: 0px;
+        position: fixed;
+        z-index: 99999;
+        background: rgba(255, 255, 255, .8);
+    }
+
+        .preloader img {
+            position: absolute;
+            LEFT: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+        }
+
+    .loader {
+        overflow: visible;
+        padding-top: 2em;
+        height: 0;
+        width: 2em;
+    }
+
+    span.align-right {
+        text-align: right;
+    }
+
+    .addnewbtn {
+        padding: 20px 10px 0;
+    }
+
+    i.fa.fa-pencil {
+        color: #1ab394;
+        background: #e2e2e2;
+        padding: 7px;
+        border-radius: 4px;
+    }
+
+        i.fa.fa-pencil:hover {
+            background: #cecece
+        }
+
+    i.fa.fa-trash:hover {
+        background: #cecece
+    }
+
+    i.fa.fa-trash {
+        color: red;
+        background: #e2e2e2;
+        padding: 7px;
+        border-radius: 4px;
+        margin-top: 10px;
+    }
+
+    div#QuestionnaireCustomerList_filter input[type=search] {
+        border: 1px solid #ccc;
+    }
+
+    i.fa.fa-pencil {
+        color: #1ab394;
+    }
+
+    i.fa.fa-trash {
+        color: red;
+    }
+
+    tr.odd td {
+        background: #f8f8f8 !important;
+    }
+
+    tr.odd:hover td, tr.even:hover td {
+        background: #eee !important;
+    }
+
+    tr.even td {
+        background: #fff !important;
+    }
+
+    .viewuser {
+        background: #eee;
+        padding: 5px 7px;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        margin-top: 5px;
+        color: #1ab394;
+    }
+</style>
+@if (HttpContextAccessor.HttpContext.Request.Cookies["UserType"].ToString() == "False")
+{
+    <div class="addnewbtn">
+        <span class="align-right">
+            <a class="btn btn-primary" href="@Url.Action("CreateNewCustomer", "Questionnaire")">Add New Customer</a>
+        </span>
+    </div>
+}
+    <div id="alert-success" class="alert alert-success alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <span id="successMessage"></span>
+    </div>
+    <div class="alert alert-danger alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+        <span id="failureMessage"></span>
+    </div>
+    <div class="preloader" style="display:none;">
+        <div class="loader">
+            <img src="~/images/loader.gif" />
+        </div>
+    </div>
+    <div class="wrapper wrapper-content animated fadeInRight">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox ">
+                    <div class="ibox-title">
+                        <h5>Customers</h5>
+                        <div class="ibox-tools">
+                            <a class="collapse-link">
+                                <i class="fa fa-chevron-up"></i>
+                            </a>
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="fa fa-wrench"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user">
+                                <li>
+                                    <a href="#" class="dropdown-item">Config option 1</a>
+                                </li>
+                                <li>
+                                    <a href="#" class="dropdown-item">Config option 2</a>
+                                </li>
+                            </ul>
+                            <a class="close-link">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="ibox-content">
+
+                        @(Html.Ext().Grid<MyavanaAdminModels.QuestionnaireCustomerList>
+                        ().Name("QuestionnaireCustomerList")
+                        .Columns(cols =>
+                        {
+                        cols.Add(c => c.UserName).Title("User Name");
+                        cols.Add(c => c.UserEmail).Title("User Email");
+                        cols.Add(c => c.UserId).Render(() => "onRenderId");
+                        cols.Add(c => c.UserId).Render(() => "onRenderCustomerMsg").Title("Message");
+                        cols.Add(c => c.UserId).Render(() => "onRenderViewCustomerMsg");
+                        })
+
+                        .ServerSide(false)
+                        .Ordering(false)
+                        .Paging(true)
+                        .Searching(true)
+                        .Info(false)
+                        .DataSource(c =>
+                        c.Ajax().Url("QuestionnaireCustomerList").Method("Get")
+                        )
+                        )
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="confirmModalHeader" class="font-bold">Delete</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <span id="confirmModalText"></span>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancelMethod" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" id="confirmMethod">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="sendCustomerMessage" tabindex="-1" role="dialog" aria-labelledby="sendCustomerMessage" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="headerText" class="font-bold">Send Message</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body p-3">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="w-100">Subject*:</label>
+                        </div>
+                        <div class="col-lg-12 mb-3">
+                            <div class="field-style ">
+                                <div class3="wrap-input100 login-form-style border-0">
+                                    <input type="text" id="txtSubject" class="p-2 w-100" value="Your HHCP has been updated">
+                                    <span class="text-danger mt-2 d-block" id="subjectValidation">
+                                        <span id="subjectError"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12 ">
+                            <label class="w-100">Message*:</label>
+                        </div>
+                        <div class="col-lg-12 mb-3">
+                            <div class="field-style ">
+                                <div class="wrap-input100 login-form-style border-0">
+                                    <textarea id="txtMessageText" class="p-2 w-100" rows="3" value="hello"></textarea>
+                                    <span class="text-danger" id="messageValidation">
+                                        <span id="messageError"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <label class="w-100">Attachments</label>
+                        </div>
+                        <div class="col-lg-12 m-b-30">
+                            <div class="">
+                                <button id="btnImageClick" class="btn btn-outline-secondary">Choose file</button>
+                                <span id="selectedImage"></span>
+                                <input type="file" id="attachmentFile" accept="*" style="display:none" />
+                            </div>
+                            <div id="spnFileAttach" style="display:none;"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" id="sendMessage" onclick="sendCustomerMessage()">Send</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var userId, userEmail, userName, messageData = new FormData(), validMessage = true;
+        function onRenderId(data, type, row, meta) {
+            var tr;
+            if (row.IsQuestionnaire == false)
+                tr = '<a href="/Questionnaire/start/' + row.UserId + '" Title="Add QA" ><img src="http://admin.myavana.com/images/questionaireAdmin.png"/></i></a>';
+            //tr = '<a href="/Questionnaire/start/' + row.UserId + '" Title="Questionnaire" ><i class="fa fa-user viewuser" aria-hidden="true"></i></a>';
+            else
+                tr = '<a href="/Questionnaire/QuestionaireSurvey?id=update&userId=' + row.UserId + '" href="/Questionnaire/start/' + row.UserId + '" Title="Update QA" ><img src="http://admin.myavana.com/images/QAupdate.png"/></i></a>';
+            return tr;
+        }
+        function onRenderCustomerMsg(data, type, row, meta) {
+            var tr;
+            var dataArray = new Array();
+            dataArray.push(row.UserId);
+            dataArray.push(row.UserEmail);
+            tr = '<a onclick="openCustomerMessageModal(\'' + row.UserId + '\',\'' + row.UserEmail + '\',\'' + row.UserName + '\')" Title="Send Message" ><i class="fa fa-envelope"></i></a>';
+            return tr;
+        }
+        function openCustomerMessageModal(Id, email, name) {
+            userId = Id;
+            userEmail = email;
+            userName = name;
+            clearMessageValues();
+            $('#sendCustomerMessage').modal('show');
+            $('#txtSubject').val("Your HHCP has been updated");
+            var customerDashboard = "CLICK HERE";
+            var $anchor = $("<a/>")
+                .text(customerDashboard)
+                .attr("href", "http://customer.myavana.com" + customerDashboard.substr(1));
+            $('#txtMessageText').val("Hi " + name + "!\n This is to inform you that your healthy hair care plan has just been updated! Please CLICK HERE and sign in with your MYAVANA Customer Dashboard credentials to view them. Email support@myavana.com if you have any questions!\nBest regards,\n MYAVANA Support Team");
+        }
+        function onRenderViewCustomerMsg(data, type, row, meta) {
+            var tr;
+            tr = '<a href="/Questionnaire/CustomerMessages?userId=' + row.UserId + '" Title="View Messages" ><i class="fa fa-history"></i></a>';
+            return tr;
+        }
+        $(document).ready(function () {
+            jQuery('#txtSubject').on('input', function () {
+                $("#subjectError").text("");
+                $("#subjectValidation").removeClass("field-validation-error");
+            });
+            jQuery('#txtMessageText').on('input', function () {
+                $("#messageError").text("");
+                $("#messageValidation").removeClass("field-validation-error");
+            });
+        });
+        function clearMessageValues() {
+            validMessage = true;
+            $('#txtSubject').val("");
+            $('#txtMessageText').val("");
+            $("#messageError").text("");
+            $("#subjectError").text("");
+            $("#subjectValidation").removeClass("field-validation-error");
+            $("#messageValidation").removeClass("field-validation-error");
+            $('#spnFileAttach').html('');
+            $('#spnFileAttach').css('display', 'block');
+            messageData = new FormData();
+        }
+
+        $('#btnImageClick').click(function () {
+            $('#attachmentFile').click();
+        });
+
+        $('#attachmentFile').change(function (event) {
+            var filename = event.target.files[0].name;
+            if (filename != null || filename != undefined) {
+                $('#spnFileAttach').html('');
+                $('#spnFileAttach').css('display', 'flex');
+                $('#spnFileAttach').append("<span id=" + filename + " class='spnAttachment' >" + filename + "<i class='fa fa-times' onclick=deleteFile('" + filename + "')></i></span>");
+            }
+        });
+
+        function sendCustomerMessage() {
+            if ($('#txtSubject').val() == '') {
+                $("#subjectValidation").addClass("field-validation-error");
+                $("#subjectError").text("Subject required.");
+                validMessage = false;
+            }
+            if ($('#txtMessageText').val() == '') {
+                $("#messageValidation").addClass("field-validation-error");
+                $("#messageError").text("Message required.");
+                validMessage = false;
+            }
+            if (!validMessage) {
+                return false;
+            }
+            var file = $('#attachmentFile').get(0).files[0];
+
+            messageData.append("UserId", userId);
+            messageData.append("EmailAddress", userEmail);
+            messageData.append("Subject", $('#txtSubject').val());
+            messageData.append("Message", $('#txtMessageText').val());
+            messageData.append("AttachmentFile", $('#selectedImage').val());
+            messageData.append("File", file);
+            messageData.append("UserName", userName);
+
+            $('.preloader').css('display', 'block');
+            $.ajax({
+                type: "POST",
+                url: "/Questionnaire/SaveCustomerMessage",
+                data: messageData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    if (response == "1") {
+                        $('#successMessage').text("Message sent successfully !");
+                        $('.alert-success').css("display", "block");
+                        $('.alert-success').delay(3000).fadeOut();
+                        $('#sendCustomerMessage').modal('hide');
+                    }
+                    else {
+                        $('#failureMessage').text("Oops something goes wrong !");
+                        $('.alert-danger').css("display", "block");
+                        $('.alert-danger').delay(3000).fadeOut();
+                        $('#sendCustomerMessage').modal('hide');
+                    }
+                    $('.preloader').css('display', 'none');
+                },
+            });
+        }
+
+    </script>

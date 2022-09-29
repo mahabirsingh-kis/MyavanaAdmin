@@ -1,0 +1,9 @@
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminModels\bin\Debug\netstandard2.0\MyavanaAdminModels.deps.json
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminModels\bin\Debug\netstandard2.0\MyavanaAdminModels.dll
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminModels\bin\Debug\netstandard2.0\MyavanaAdminModels.pdb
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminModels\obj\Debug\netstandard2.0\MyavanaAdminModels.csprojAssemblyReference.cache
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminModels\obj\Debug\netstandard2.0\MyavanaAdminModels.csproj.CoreCompileInputs.cache
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminModels\obj\Debug\netstandard2.0\MyavanaAdminModels.AssemblyInfoInputs.cache
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminModels\obj\Debug\netstandard2.0\MyavanaAdminModels.AssemblyInfo.cs
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminModels\obj\Debug\netstandard2.0\MyavanaAdminModels.dll
+D:\Work2022\My Avana\MyavanaAdminV2\MyavanaAdmin\MyavanaAdminModels\obj\Debug\netstandard2.0\MyavanaAdminModels.pdb

@@ -1,0 +1,232 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper AuthoringTagHelpers.TagHelpers.EmailTagHelper, AuthoringTagHelpers
+@model MyavanaAdminModels.WebLogin
+
+@{
+    ViewData["Title"] = "CreateNewCustomer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*@if (Model != null)
+{
+    <input type="hidden" id="Id" value="@Model.UserId" />
+}
+*@
+
+<style>
+    .alert-success, .alert-danger, .alert-info {
+        top: 110px !important;
+        width: 60% !important;
+        margin: 0 auto;
+        z-index: 99;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-40%);
+        text-align: center;
+        padding: 12px;
+        transition: all 1s linear;
+        box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.2);
+        font-size: 16px;
+    }
+
+    .alert-danger {
+        color: #80172a;
+        background-color: #fdd5dc;
+        border-color: #fcc4ce;
+    }
+
+        .alert-danger hr {
+            border-top-color: #fbacba;
+        }
+
+        .alert-danger .alert-link {
+            color: #550f1c;
+        }
+
+    .alert-success {
+        color: #1c6356;
+        background-color: #a8ffc3;
+        border-color: #13b755;
+    }
+
+        .alert-success hr {
+            border-top-color: #b4e7dd;
+        }
+
+        .alert-success .alert-link {
+            color: #113b33;
+        }
+
+    .preloader {
+        width: calc(100% - 200px);
+        height: 100%;
+        top: 0px;
+        position: fixed;
+        z-index: 99999;
+        background: rgba(255, 255, 255, .8);
+    }
+
+        .preloader img {
+            position: absolute;
+            LEFT: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+        }
+
+    .loader {
+        overflow: visible;
+        padding-top: 2em;
+        height: 0;
+        width: 2em;
+    }
+</style>
+<div id="alert-success" class="alert alert-success alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span id="successMessage"></span>
+</div>
+<div class="alert alert-danger alert-dismissible" style="display:none; width:50%" data-keyboard="false" data-backdrop="static">
+    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+    <span id="failureMessage"></span>
+</div>
+<div class="preloader" style="display:none;">
+    <div class="loader">
+        <img src="~/images/loader.gif" />
+    </div>
+</div>
+<div class="wrapper wrapper-content animated fadeInRight">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Post User</h5>
+
+                </div>
+                <div class="ibox-content">
+                    @*<form method="post">*@
+                    <div class="form-group">
+                        <input id="txtFirstName" type="text" class="form-control" placeholder="First Name*">
+                    </div>
+                    <div class="form-group">
+                        <input id="txtLastName" type="text" class="form-control" placeholder="Last Name*">
+                    </div>
+                    <div class="form-group">
+                        <input id="txtEmail" type="text" class="form-control" placeholder="Email*">
+                    </div>
+                    <div class="form-group">
+                        <input id="txtPassword" type="password" class="form-control" placeholder="Password*">
+                    </div>
+                    <div class="form-group">
+                        <input id="txtCPassword" type="password" class="form-control" placeholder="Re-Type Password*">
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group countrylistdropdown">
+                            <input id="txtCountryCode" type="number" maxlength="10" class="form-control" placeholder="">
+                            @*<select id="txtCountryCode"></select>*@
+                        </div>
+
+                        <div class="form-group">
+                            <input id="txtPhoneNo" type="text" class="form-control" placeholder="Phone Number*">
+                        </div>
+
+                        <div>
+                            <p>
+                                Your phone number required so that we may contact you in regards to your hair consultation and support while using our app.Your privacy is very important to us; we do not share your phone number with other companies.
+                            </p>
+                        </div>
+                        <div>
+                            <p>
+                                Registering will enable you to access the functionality of our app from any of your devices.
+                            </p>
+                        </div>
+
+                        <button type="submit" onclick="signupUser()" class="btn btn-primary block full-width mb-0" style="background:#EBC7C7; color:black">Signup</button>
+                    </div>>
+                </div>
+                @*</form>*@
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/js/admin/intlTelInput.min.js"></script>
+<script src="~/js/admin/intlTelInput-jquery.min.js"></script>
+<script>
+    function signupUser() {
+
+
+        if ($('#txtEmail').val().trim() == '' || $('#txtFirstName').val().trim() == '' || $('#txtLastName').val().trim() == '' || $('#txtPhoneNo').val().trim() == '' ||
+            $('#txtPassword').val().trim() == '' || $('#txtCPassword').val().trim() == '') {
+            $('#failureMessage').text("Please fill mandatory fields");
+            $('.alert-danger').css("display", "block");
+            $('.alert-danger').delay(2000).fadeOut();
+            return false;
+        }
+
+        if (!RegExp(/^[a-zA-Z0-9._-]+@@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/).test($('#txtEmail').val().trim())) {
+            $('#failureMessage').text("Please enter valid email!");
+            $('.alert-danger').css("display", "block");
+            $('.alert-danger').delay(2000).fadeOut();
+            return false;
+        }
+        var pattern = new RegExp(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/);
+        if (!pattern.test($('#txtCPassword').val().trim())) {
+            $('#failureMessage').text("Password pattern doesn't match. Must atleast 8 character length.One upper case, one lower case, one digit and 1 special chanracter");
+            $('.alert-danger').css("display", "block");
+            $('.alert-danger').delay(3000).fadeOut();
+            return false;
+        }
+        if ($('#txtCPassword').val().trim() != $('#txtPassword').val().trim()) {
+            $('#failureMessage').text("Password and confirm password doesn't match");
+            $('.alert-danger').css("display", "block");
+            $('.alert-danger').delay(3000).fadeOut();
+            return false;
+        }
+
+        if (! /^\(?([0-9]{3})\)?[-. ]?([0-9]{3})[-. ]?([0-9]{4})$/.test($("#txtPhoneNo").val().trim())) {
+            $('#failureMessage').text("Enter valid phone no.");
+            $('.alert-danger').css("display", "block");
+            $('.alert-danger').delay(3000).fadeOut();
+            return false;
+        }
+        signup = {
+            Email: $('#txtEmail').val().trim(),
+            FirstName: $('#txtFirstName').val().trim(),
+            LastName: $('#txtLastName').val().trim(),
+            PhoneNo: $('#txtPhoneNo').val().trim(),
+            CountryCode: $("#txtCountryCode").intlTelInput("getSelectedCountryData").dialCode,
+            Password: $('#txtPassword').val().trim()
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/Questionnaire/CreateNewCustomer",
+            data: signup,
+            success: function (response) {
+                if (response == "0") {
+                    $('#failureMessage').text("User already exist. Please try with different Username");
+                    $('.alert-danger').css("display", "block");
+                    $('.alert-danger').delay(3000).fadeOut();
+
+                }
+                else if (response == "-1") {
+                    $('#failureMessage').text("Something went wrong. Please try later");
+                    $('.alert-danger').css("display", "block");
+                    $('.alert-danger').delay(3000).fadeOut();
+
+                    //$('#txtLogin').val(''),
+                    //$('#txtPassword').val('')
+                }
+                else {
+                    window.location.href = "/Questionnaire/QuestionnaireCustomer"
+                }
+
+            },
+            failure: function (response) {
+            },
+            error: function (response) {
+            },
+        });
+    }
+</script>
+
